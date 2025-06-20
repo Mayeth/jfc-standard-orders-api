@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="impl-post-orders-sub-flow" doc:id="b43a8460-1674-4484-9304-8b57bc8e4dde" >
+		<logger level="INFO" doc:name="Logger - START" doc:id="7ecfc25e-4106-44f4-a405-cf39139f849f" message="START"/>
+		<ee:transform doc:name="Set var orders, ordersItem" doc:id="69b26228-54d0-48d3-8844-0bcd21674ff2">
+			<ee:message>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dw/post-create-orders/post-create-orders-item.dwl" variableName="products" />
+				<ee:set-variable resource="dw/post-create-orders/post-create-orders.dwl" variableName="orders" />
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="sys-jfc-database-create-orders-sub-flow" doc:id="ce03c2d9-2898-4a7c-b3d6-e7b8867e917f" name="sys-jfc-database-create-orders-sub-flow"/>
+		<ee:transform doc:name="Success Order Creation Response" doc:id="0cfa5d7e-3198-4e5e-a2bc-f94e5ee27e2e">
+			<ee:message>
+				<ee:set-payload resource="dw/post-create-orders/post-create-orders-success-response.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger - END" doc:id="4b59cd9a-7556-44bf-8037-863bd79d3ffc" message="END" />
+	</sub-flow>
+</mule>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<flow name="sys-jfc-database-create-orders-sub-flow" doc:id="2c9bbaee-a81c-486b-9b26-bd5532232f91" >
+		<logger level="INFO" doc:name="Logger - START" doc:id="a61bdbaf-dc7b-4b74-9a6e-d2a5f05d3517" message="START" />
+		<db:insert doc:name="Insert Order" doc:id="7ac0179a-5248-4331-a663-a172136e47fa" config-ref="DBJFC_Config">
+			<db:sql><![CDATA[INSERT INTO orders(order_id, source, customer_name, total_amount)
+VALUES
+(:orderId, :source, :customerName, :totalAmount)
+
+]]></db:sql>
+			<db:input-parameters><![CDATA[#[vars.orders]]]></db:input-parameters>
+		</db:insert>
+		<db:bulk-insert doc:name="Bulk insert products" doc:id="eddff2e7-322e-4902-854d-1beb651f76ff" config-ref="DBJFC_Config">
+			<db:bulk-input-parameters><![CDATA[#[vars.products]]]></db:bulk-input-parameters>
+			<db:sql><![CDATA[INSERT INTO order_items(item_id, order_id, product_name, price, quantity)
+VALUES
+(:itemId, :orderId, :productName, :price, :quantity)
+
+]]></db:sql>
+		</db:bulk-insert>
+		<logger level="INFO" doc:name="Logger - END" doc:id="10a0c924-9049-4083-90b1-50cdbf9dea27" message="END" />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a3cd5167-710b-4521-ae98-cef03f5f2db1" type="ANY">
+				<ee:transform doc:name="Set Error Response" doc:id="beb3acda-cee7-48ef-816a-79ca3e5689f9" >
+					<ee:message >
+						<ee:set-payload resource="dw/post-create-orders/post-create-orders-error-response.dwl" />
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<flow name="sys-jfc-database-retrieve-orders-sub-flow" doc:id="324e08c0-eb1f-429d-8b4d-805bf31cfbec" >
+		<logger level="INFO" doc:name="Logger - START" doc:id="ab53e856-ed7f-4891-b166-6fc3a34f55e4" message="START" />
+		<db:select doc:name="Select Customer Order ID" doc:id="69fc3b2a-8cce-41be-be8e-ef9f006bd0fa" config-ref="DBJFC_Config">
+			<db:sql ><![CDATA[SELECT  item_id, orders.order_id, product_name, price, quantity, source, customer_name, total_amount, order_date 
+FROM  order_items 
+JOIN orders WHERE orders.order_id = :orderId AND order_items.order_id = :orderId]]></db:sql>
+			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
+		</db:select>
+		<validation:is-not-empty-collection doc:name="Is not empty collection" doc:id="cb5bee7f-2765-470e-973c-cf6cdba213dc" />
+		<logger level="INFO" doc:name="Logger - END" doc:id="d1be4036-3b34-49c0-9e9d-31429ab5d0b7" message="END" />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="4666436c-e308-4f9e-a7c9-13637c0ca49f" type="ANY">
+				<ee:transform doc:name="Set Error Response" doc:id="60f48fc4-8462-4513-bcb9-9f350b3e0fd2" >
+					<ee:message >
+						<ee:set-payload resource="dw/get-retrieve-orders/get-retrieve-order-items-error-response.dwl" />
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

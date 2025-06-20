@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <flow name="jfc-standard-orders-api-main">
+        <http:listener config-ref="jfc-standard-orders-api-httpListenerConfig" path="/jfc/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:body><![CDATA[#[output application/json --- payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="jfc-standard-orders-api-config" />
+		<error-handler ref="apikit-error-handling" />
+    </flow>
+    <flow name="jfc-standard-orders-api-console">
+        <http:listener config-ref="jfc-standard-orders-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="jfc-standard-orders-api-config" />
+		<error-handler ref="apikit-error-handling" />
+    </flow>
+    <flow name="post:\orders:application\json:jfc-standard-orders-api-config">
+        <logger level="INFO" doc:name="Logger - START" doc:id="a716453d-aaf3-4220-987f-a90a31b6b06d" message="START" />
+        <flow-ref doc:name="impl-post-orders-sub-flow" doc:id="3520ba47-ae81-4f27-bd30-33171897ed89" name="impl-post-orders-sub-flow" />
+        <logger level="INFO" doc:name="Logger - END" doc:id="bffc73c3-4207-491e-a016-d6edd3196603" message="END" />
+    </flow>
+    <flow name="get:\orders\(orderId):jfc-standard-orders-api-config">
+        <logger level="INFO" doc:name="Logger - START" doc:id="fb770d03-43bc-427b-8f05-d0ea3fa5e90f" message="START" />
+        <flow-ref doc:name="impl-get-orders-sub-flow" doc:id="d95c446d-a38d-43e2-9728-d8dec558bb43" name="impl-get-orders-sub-flow" />
+        <logger level="INFO" doc:name="Logger - END" doc:id="8b9f169f-4c77-40fb-b735-f5cbc8e52a01" message="END" />
+    </flow>
+</mule>

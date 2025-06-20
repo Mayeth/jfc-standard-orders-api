@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<sub-flow name="impl-get-orders-sub-flow" doc:id="749365cc-da52-4b6a-a3f1-230506fe8db7" >
+		<logger level="INFO" doc:name="Logger - START" doc:id="03a236a1-5e43-4088-8d3e-75fdc6435889" message="START" />
+		<ee:transform doc:name="Set orderId" doc:id="45b5aebc-a1ab-4191-81d8-f5f6e5aba267">
+			<ee:message >
+				<ee:set-payload resource="dw/get-retrieve-orders/get-retrieve-order.dwl" />
+			</ee:message>
+			<ee:variables>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="sys-jfc-database-retrieve-orders-sub-flow" doc:id="4aba41fd-d3bf-472b-8a8a-2e9f69d5c63d" name="sys-jfc-database-retrieve-orders-sub-flow"/>
+		<ee:transform doc:name="Set Order Details Response" doc:id="6a9cfa26-565a-4f5d-84de-d6e288283bf3">
+			<ee:message>
+				<ee:set-payload resource="dw/get-retrieve-orders/get-retrieve-order-items.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger - END" doc:id="8b528e04-8a95-47e3-a5b0-bf0fa7afbf49" message="END" />
+	</sub-flow>
+</mule>

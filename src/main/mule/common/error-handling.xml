@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="apikit-error-handling" doc:id="4edefb86-7b7c-4df6-aa46-a3328aaa62b5" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2c92db27-1361-4ad6-8e5d-ef030aac70c5" type="APIKIT:BAD_REQUEST" >
+			<ee:transform doc:name="Set Bad Request Message" doc:id="8f405c49-c10d-49d9-9275-64b8a871893e" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad Request"}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<ee:transform doc:name="Set Standard Error Response" doc:id="c766fcb8-67c0-4b35-9d11-fb72a9747c96">
+				<ee:message>
+					<ee:set-payload resource="dw/common/common-standard-error-response.dwl" />
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d071bf97-3f80-4425-925b-d4a5e987e183" type="APIKIT:NOT_FOUND" >
+			<ee:transform doc:name="Set Not Found Message" doc:id="3f7ab311-b32d-45cb-807b-a50f4a9499d6" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<ee:transform doc:name="Set Standard Error Response" doc:id="06c1eea9-bc0c-41c5-929b-106bae8d52b9" >
+				<ee:message >
+					<ee:set-payload resource="dw/common/common-standard-error-response.dwl" />
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="fde37902-d1e5-450a-9361-8ee4b24eeace" type="APIKIT:METHOD_NOT_ALLOWED" >
+			<ee:transform doc:name="Set Not Allowed Message" doc:id="d11006ae-fcb0-4002-9a43-ade981880649" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[405]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<ee:transform doc:name="Set Standard Error Response" doc:id="420d2383-284b-4e33-a071-fa59f97377f8" >
+				<ee:message >
+					<ee:set-payload resource="dw/common/common-standard-error-response.dwl" />
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a293c117-db8c-4b76-b29d-5f1269542e51" type="APIKIT:NOT_ACCEPTABLE" >
+			<ee:transform doc:name="Set Not Acceptable Message" doc:id="e03f7202-b396-440a-a5aa-cea89608dc92" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[406]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<ee:transform doc:name="Set Standard Error Response" doc:id="de994c44-75fb-43c4-9f93-fd33293140b5" >
+				<ee:message >
+					<ee:set-payload resource="dw/common/common-standard-error-response.dwl" />
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate4" doc:id="35b16605-d56a-47b0-8982-065558e506c1" type="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
+			<ee:transform doc:name="Set Unsupported Message" doc:id="7587372a-e9b0-405a-994a-1bc7c21df2b4" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[415]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<ee:transform doc:name="Set Standard Error Response" doc:id="52014f38-8e6c-48c0-8848-2e7933aa64d2" >
+				<ee:message >
+					<ee:set-payload resource="dw/common/common-standard-error-response.dwl" />
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="4050f003-1521-49ac-973f-7df296443284" type="APIKIT:NOT_IMPLEMENTED" >
+			<ee:transform doc:name="Set Not Implemented Message" doc:id="ce51d7b6-9587-49db-ad5c-ade0cbbac0bd" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[501]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<ee:transform doc:name="Set Standard Error Response" doc:id="51df714a-95cd-4493-8091-e0de83f16320" >
+				<ee:message >
+					<ee:set-payload resource="dw/common/common-standard-error-response.dwl" />
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+	</error-handler>
+</mule>

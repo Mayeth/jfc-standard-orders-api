@@ -1,0 +1,13 @@
+{
+  "minMuleVersion": "4.9.0",
+  "javaSpecificationVersions": [
+    "17"
+  ],
+  "secureProperties": [
+  	"secure.key",
+  	"jfc.db.host",
+  	"jfc.db.user",
+  	"jfc.db.password",
+  	"jfc.db.name"
+  ]
+}
