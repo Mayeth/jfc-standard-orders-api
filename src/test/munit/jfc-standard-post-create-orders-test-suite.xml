@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="   http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd   http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd   http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="jfc-standard-post-create-orders-test-suite.xml"/>
+	<munit:test doc:id="d20857c8-e387-40ea-b79a-c26ae49d6d70" name="jfc-standard-post-orders-success-test">
+		<munit:behavior>
+			<munit-tools:mock-when doc:id="e1f684e1-6a19-4f30-81c6-4d3b92ac082f" doc:name="Mock when Inser Order" processor="db:insert">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Insert Order"/>
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:id="b5527ddb-3a37-4aaf-ab12-85bc5d7cbf87" doc:name="Mock when Insert products" processor="db:bulk-insert">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Bulk insert products"/>
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:id="4e0c2f4c-d4c2-43a6-9666-f26f27d376a6" doc:name="Set Event">
+				<munit:payload encoding="UTF-8" mediaType="application/json" value="#[output application/json --- readUrl('classpath://post-create-orders/post-create-orders-success-request.json')]"/>
+			</munit:set-event>
+			<flow-ref doc:id="71af1a68-9e23-490b-b61d-e24fb90cda0a" doc:name="post:\orders:application\json:jfc-standard-orders-api-config" name="post:\orders:application\json:jfc-standard-orders-api-config"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals actual="#[vars.httpStatus]" doc:id="28a65349-c099-441b-8839-55aa9e3221d6" doc:name="Assert equals 200" expected="#[200 as Number]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test doc:id="10e86cc1-9b4b-4ed1-b88c-cbfc4270f545" name="jfc-standard-post-orders-failure-test">
+		<munit:behavior>
+			<munit-tools:mock-when doc:id="abf41842-67f6-4901-a7cd-0b8dc1ec0656" doc:name="Mock when Inser Order" processor="db:insert">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Insert Order"/>
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error typeId="DB:QUERY_EXECUTION"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:id="b5c37b6a-7b5d-4571-9d34-f45424df0614" doc:name="Set Event">
+				<munit:payload encoding="UTF-8" mediaType="application/json" value="#[output application/json --- readUrl('classpath://post-create-orders/post-create-orders-failure-request.json')]"/>
+			</munit:set-event>
+			<try doc:id="d692388b-1e81-4631-a138-d71f8147390a" doc:name="Try">
+				<flow-ref doc:id="a2b0a38b-9aa0-403d-8a19-0f77759de2f5" doc:name="post:\orders:application\json:jfc-standard-orders-api-config" name="post:\orders:application\json:jfc-standard-orders-api-config"/>
+				<error-handler>
+					<on-error-continue doc:id="fc60bc1a-bce1-4e9d-9d17-e8afcf221ca7" doc:name="On Error Continue" enableNotifications="true" logException="true"/>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals actual="#[vars.httpStatus]" doc:id="0229e689-d95f-4f93-8ec8-9b8e033986ff" doc:name="Assert equals 500" expected="#[500 as Number]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

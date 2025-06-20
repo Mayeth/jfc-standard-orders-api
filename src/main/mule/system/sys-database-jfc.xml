@@ -31,6 +31,9 @@ VALUES
 					<ee:message >
 						<ee:set-payload resource="dw/post-create-orders/post-create-orders-error-response.dwl" />
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
 			</on-error-propagate>
 		</error-handler>
@@ -43,6 +46,7 @@ FROM  order_items
 JOIN orders WHERE orders.order_id = :orderId AND order_items.order_id = :orderId]]></db:sql>
 			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
 		</db:select>
+		<logger level="INFO" doc:name="ETO SYA!!!!!" doc:id="ae158ae8-c14b-4435-8a67-7c799c35cdc9" message="#[payload]"/>
 		<validation:is-not-empty-collection doc:name="Is not empty collection" doc:id="cb5bee7f-2765-470e-973c-cf6cdba213dc" />
 		<logger level="INFO" doc:name="Logger - END" doc:id="d1be4036-3b34-49c0-9e9d-31429ab5d0b7" message="END" />
 		<error-handler >
@@ -51,6 +55,9 @@ JOIN orders WHERE orders.order_id = :orderId AND order_items.order_id = :orderId
 					<ee:message >
 						<ee:set-payload resource="dw/get-retrieve-orders/get-retrieve-order-items-error-response.dwl" />
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
 			</on-error-propagate>
 		</error-handler>

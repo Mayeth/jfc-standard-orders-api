@@ -1,0 +1,26 @@
+{
+  "orderId": "ABCMUNIT6",
+  "customer": {
+    "name": "Mayeth",
+    "phone": "+639171234567"
+  },
+  "products": [
+    {
+      "id": "ABCMUNIT7",
+      "description": "Fries",
+      "unitPrice": 100,
+      "quantity": 2
+    },
+    {
+      "id": "ABCMUNIT7",
+      "description": "Ice Cream",
+      "unitPrice": 100,
+      "quantity": 2
+    }
+    
+  ],
+  "totalAmount": 200,
+  "paymentMethod": "YummyPay",
+  "timestamp": "2025-02-07T10:15:00Z",
+  "source": "Yummy App"
+}

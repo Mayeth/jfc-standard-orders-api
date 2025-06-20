@@ -19,6 +19,9 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<ee:message>
 				<ee:set-payload resource="dw/post-create-orders/post-create-orders-success-response.dwl" />
 			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[200]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger - END" doc:id="4b59cd9a-7556-44bf-8037-863bd79d3ffc" message="END" />
 	</sub-flow>

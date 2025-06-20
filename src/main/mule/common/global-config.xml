@@ -23,4 +23,5 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	</db:config>
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="de45d721-8df6-45ea-abc7-189d70fe9406" file="secure-config/${env}/config.properties" key="${secure.key}">
 	</secure-properties:config>
+	<global-property doc:name="Global Property" doc:id="10d7f1ff-a3e2-4c99-9931-98acddbfff9e" name="env" value="dev" />
 </mule>

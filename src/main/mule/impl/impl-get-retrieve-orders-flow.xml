@@ -20,6 +20,9 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 			<ee:message>
 				<ee:set-payload resource="dw/get-retrieve-orders/get-retrieve-order-items.dwl" />
 			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[200]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger - END" doc:id="8b528e04-8a95-47e3-a5b0-bf0fa7afbf49" message="END" />
 	</sub-flow>

@@ -5,5 +5,5 @@ output application/json
 ---
       
 {
-  "orderId": attributes.uriParams.orderId
+  "orderId": attributes.uriParams.'orderId'
 }

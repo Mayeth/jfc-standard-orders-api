@@ -14,25 +14,12 @@
         <apikit:router config-ref="jfc-standard-orders-api-config" />
 		<error-handler ref="apikit-error-handling" />
     </flow>
-    <flow name="jfc-standard-orders-api-console">
-        <http:listener config-ref="jfc-standard-orders-api-httpListenerConfig" path="/console/*">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:response>
-            <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:error-response>
-        </http:listener>
-        <apikit:console config-ref="jfc-standard-orders-api-config" />
-		<error-handler ref="apikit-error-handling" />
-    </flow>
     <flow name="post:\orders:application\json:jfc-standard-orders-api-config">
         <logger level="INFO" doc:name="Logger - START" doc:id="a716453d-aaf3-4220-987f-a90a31b6b06d" message="START" />
         <flow-ref doc:name="impl-post-orders-sub-flow" doc:id="3520ba47-ae81-4f27-bd30-33171897ed89" name="impl-post-orders-sub-flow" />
         <logger level="INFO" doc:name="Logger - END" doc:id="bffc73c3-4207-491e-a016-d6edd3196603" message="END" />
     </flow>
-    <flow name="get:\orders\(orderId):jfc-standard-orders-api-config">
+    <flow name="get:\orders\(orderId):jfc-standard-orders-api-config" doc:id="597550e9-02bf-4aa3-8cbe-abb6f5521473">
         <logger level="INFO" doc:name="Logger - START" doc:id="fb770d03-43bc-427b-8f05-d0ea3fa5e90f" message="START" />
         <flow-ref doc:name="impl-get-orders-sub-flow" doc:id="d95c446d-a38d-43e2-9728-d8dec558bb43" name="impl-get-orders-sub-flow" />
         <logger level="INFO" doc:name="Logger - END" doc:id="8b9f169f-4c77-40fb-b735-f5cbc8e52a01" message="END" />
