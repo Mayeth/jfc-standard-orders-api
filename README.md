@@ -31,7 +31,7 @@ Standard API to store and retrieve orders from Yummy App or Growling Trigers
 #### Get Order Details
 
 ```http
-  GET /order/${orderId}
+  GET /orders/${orderId}
 ```
 
 | Parameter | Type     | Description                       |
