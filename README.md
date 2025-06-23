@@ -21,7 +21,7 @@ Standard API to store and retrieve orders from Yummy App or Growling Trigers
 | `products.id` | `string` | Product Unique Reference |
 |`product.description` | `string`| Product Short Description |
 |`product.unitPrice` | `string`| Product Price |
-|`product.unitPrice` | `string`| Product Quantity |
+|`product.quantity` | `string`| Product Quantity |
 |`totalAmount` | `string`| Total Amount of Order |
 |`paymentMethod` | `string`| Payment Method |
 |`timestamp` | `string`| Order Date |
